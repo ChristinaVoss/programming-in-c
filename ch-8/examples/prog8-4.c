@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+
+struct date
+{
+	int month;
+	int day;
+	int year;
+};
+
+int getNumOfDays(struct date d);
+bool isLeapYear(struct date d);
+struct date dateUpdate(struct date d);
+
+int main(void)
+{
+	struct date today, tomorrow;
+
+	printf("enter today's date: ");
+	scanf("%i %i %i", &today.day, &today.month, &today.year);
+
+	tomorrow = dateUpdate(today);
+
+	printf("tomorrow is: %i/%i/%i\n", tomorrow.month, tomorrow.day, tomorrow.year);
+
+	return 0;
+}
+
+struct date dateUpdate(struct date d) {
+
+	int numOfDays = getNumOfDays(d);
+	struct date tomorrow;
+
+	if (numOfDays != d.day)
+	{
+		tomorrow = (struct date) {d.day + 1, d.month, d.year};
+	} else if (d.month == 12)
+	{
+		tomorrow = (struct date) {1, 1, d.year + 1};
+	} else {
+		tomorrow = (struct date) {1, d.month + 1, d.year};
+	}
+
+	return tomorrow;
+}
+int getNumOfDays(struct date d) {
+	int daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+	if (d.month == 2 && isLeapYear(d))
+		return 29;
+	else
+		return daysInMonth[d.month - 1];
+}
+
+bool isLeapYear(struct date d) {
+	if ((d.year % 4 == 0 && d.year % 100 != 0) || d.year % 400 == 0)
+		return true;
+	else
+		return false;
+}
